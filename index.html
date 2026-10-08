@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SpendWise - Quản lý ngân sách và thói quen chi tiêu" />
+  <title>SpendWise - Quản lý tài chính cá nhân</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Toast: thông báo thành công / lỗi -->
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <!-- SW-01: Splash -->
+  <section id="splashScreen" class="screen splash-screen">
+    <div class="splash-content">
+      <div class="splash-logo">S</div>
+      <h1>SpendWise</h1>
+      <p>Quản lý thông minh • Chi tiêu có chủ đích</p>
+      <div class="loading-track"><div class="loading-bar"></div></div>
+      <small>Đang chuẩn bị không gian tài chính của bạn…</small>
+    </div>
+    <span class="screen-code">SW-01 • Loading / Splash</span>
+  </section>
+
+  <!-- SW-02: Landing -->
+  <section id="landingScreen" class="screen landing-screen hidden">
+    <header class="landing-header">
+      <button class="brand-button" data-action="home">SpendWise</button>
+      <nav class="landing-nav" aria-label="Điều hướng trang giới thiệu">
+        <button data-info="features">Tính năng</button>
+        <button data-info="how">Cách hoạt động</button>
+        <button data-info="coach">Dành cho Coach</button>
+      </nav>
+    </header>
+
+    <main class="landing-main">
+      <div class="landing-copy">
+        <h1>Hiểu tiền của bạn.<br />Chủ động tương lai.</h1>
+        <p>Theo dõi chi tiêu, xây mục tiêu và nhận gợi ý AI vừa đủ — trong một trải nghiệm bình tĩnh, rõ ràng.</p>
+        <div class="landing-actions">
+          <button id="startFreeBtn" class="btn btn-primary btn-large">Bắt đầu miễn phí</button>
+          <button id="landingLoginBtn" class="btn btn-outline btn-large">Đăng nhập</button>
+        </div>
+      </div>
+      <div class="landing-art" aria-hidden="true">
+        <div class="art-top"><span></span><span class="mint"></span></div>
+        <div class="art-body"></div>
+      </div>
+    </main>
+    <span class="screen-code">SW-02 • Landing / Home</span>
+  </section>
+
+  <!-- SW-03/04/05: Login / Register / Forgot password -->
+  <section id="authScreen" class="screen auth-screen hidden">
+    <div class="auth-side">
+      <button class="brand-button auth-brand-button" data-action="home">SpendWise</button>
+      <h2>Tiền rõ ràng.<br />Tương lai nhẹ<br />nhàng.</h2>
+      <span id="authScreenCode" class="screen-code">SW-03 • Login</span>
+    </div>
+
+    <div class="auth-main">
+      <div class="auth-card">
+        <form id="loginForm" class="auth-form">
+          <h1>Chào mừng trở lại</h1>
+          <p>Đăng nhập để tiếp tục quản lý ngân sách.</p>
+
+          <label class="sr-only" for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" autocomplete="email" placeholder="Email" required />
+
+          <label class="sr-only" for="loginPassword">Mật khẩu</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Mật khẩu" required />
+
+          <p id="loginMessage" class="form-message" aria-live="polite"></p>
+          <button class="btn btn-primary btn-block" type="submit">Đăng nhập</button>
+          <div class="auth-links">
+            <button type="button" data-auth="forgot">Quên mật khẩu?</button>
+            <span>•</span>
+            <span>Chưa có tài khoản?</span>
+            <button type="button" data-auth="register">Đăng ký</button>
+          </div>
+        </form>
+
+        <form id="registerForm" class="auth-form hidden">
+          <h1>Tạo tài khoản</h1>
+          <p>Bắt đầu xây thói quen tài chính tốt hơn hôm nay.</p>
+
+          <label class="sr-only" for="registerName">Họ và tên</label>
+          <input id="registerName" type="text" autocomplete="name" placeholder="Họ và tên" required />
+
+          <label class="sr-only" for="registerEmail">Email</label>
+          <input id="registerEmail" type="email" autocomplete="email" placeholder="Email" required />
+
+          <label class="sr-only" for="registerPassword">Mật khẩu</label>
+          <input id="registerPassword" type="password" autocomplete="new-password" placeholder="Mật khẩu (ít nhất 6 ký tự)" required />
+
+          <label class="sr-only" for="registerConfirm">Nhập lại mật khẩu</label>
+          <input id="registerConfirm" type="password" autocomplete="new-password" placeholder="Nhập lại mật khẩu" required />
+
+          <label class="auth-select-label" for="registerRole">Loại tài khoản</label>
+          <select id="registerRole" required>
+            <option value="user">Người dùng</option>
+            <option value="coach">Coach tài chính giáo dục</option>
+            <option value="moderator">Kiểm duyệt viên</option>
+            <option value="admin">Quản trị viên</option>
+          </select>
+
+          <p id="registerMessage" class="form-message" aria-live="polite"></p>
+          <button class="btn btn-primary btn-block" type="submit">Đăng ký</button>
+          <div class="auth-links center">
+            <span>Đã có tài khoản?</span>
+            <button type="button" data-auth="login">Đăng nhập</button>
+          </div>
+          <small class="terms">Bằng việc tiếp tục, bạn đồng ý với Điều khoản sử dụng.</small>
+        </form>
+
+        <form id="forgotForm" class="auth-form hidden">
+          <h1>Khôi phục mật khẩu</h1>
+          <p>Nhập email. Chúng tôi sẽ tạo luồng đặt lại an toàn ngay trên bản Frontend này.</p>
+
+          <label class="sr-only" for="forgotEmail">Email của bạn</label>
+          <input id="forgotEmail" type="email" autocomplete="email" placeholder="Email của bạn" required />
+
+          <p id="forgotMessage" class="form-message" aria-live="polite"></p>
+          <button class="btn btn-primary btn-block" type="submit">Gửi liên kết</button>
+          <div class="auth-links center">
+            <button type="button" data-auth="login">← Quay lại đăng nhập</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- SW-06 -> SW-20: ứng dụng chính. Nội dung đổi bằng JavaScript -->
+  <div id="app" class="app hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-brand">
+        <strong>SpendWise</strong>
+        <span id="sidebarRole">USER</span>
+      </div>
+      <nav id="sidebarNav" class="sidebar-nav" aria-label="Điều hướng chính"></nav>
+      <div class="sidebar-bottom">
+        <button id="sidebarLogoutBtn" class="sidebar-logout">Đăng xuất</button>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="topbar">
+        <div class="topbar-title-row">
+          <button id="menuBtn" class="menu-button" type="button" aria-label="Mở menu">☰</button>
+          <h1 id="pageTitle">Tổng quan</h1>
+        </div>
+        <div class="topbar-actions">
+          <label class="search-box">
+            <span class="sr-only">Tìm kiếm nhanh</span>
+            <input id="globalSearch" type="search" placeholder="Tìm kiếm nhanh..." />
+          </label>
+          <button id="avatarButton" class="avatar-button" type="button" title="Hồ sơ">US</button>
+        </div>
+      </header>
+
+      <section id="content" class="content" tabindex="-1"></section>
+      <div id="currentScreenCode" class="app-screen-code">SW-06 • User Dashboard</div>
+    </main>
+  </div>
+
+  <!-- Modal dùng chung cho tất cả chức năng thêm / sửa / AI / xác nhận -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <button id="closeModalBtn" class="modal-close" type="button" aria-label="Đóng">×</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
