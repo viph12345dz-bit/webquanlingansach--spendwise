@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SpendWise - Quản lý ngân sách và thói quen chi tiêu">
+<title>Dashboard hệ thống | SpendWise</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div id="toast" class="toast" aria-live="polite"></div><div id="toast" class="toast" aria-live="polite"></div>
+<div class="app-shell">
+  <aside id="sidebar" class="sidebar">
+    <a class="brand" href="home.html">SpendWise</a><div id="roleBadge" class="role-badge"></div>
+    <nav id="sidebarNav" class="nav-list"></nav>
+    <div class="sidebar-bottom"><button id="logoutBtn" class="btn btn-outline">Đăng xuất</button></div>
+  </aside>
+  <div class="app-area">
+    <header class="topbar"><button id="mobileMenu" class="mobile-menu" aria-label="Mở menu">☰</button><div class="search-wrap"><input id="globalSearch" class="search-input" placeholder="Tìm kiếm nhanh..."></div><div id="userInitials" class="avatar">US</div></header>
+    <main class="content-area"><div class="page-heading"><h1>Dashboard hệ thống</h1><span class="screen-code">SW-17 • Admin System Dashboard</span></div><section id="stats" class="stats-grid"></section><section class="panel"><div class="panel-header"><h2>Sức khỏe dịch vụ</h2><div class="panel-tools"><button id="addBtn" class="btn btn-primary">+ Thêm mới</button></div></div><div id="tableContent"></div></section></main>
+  </div>
+</div>
+<div id="modalOverlay" class="modal-overlay hidden"></div>
+<script src="../js/modules/admin-dashboard.js" defer></script>
+</body>
+</html>
