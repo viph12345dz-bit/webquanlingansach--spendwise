@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SpendWise - bảng điều khiển quản lý chi tiêu cá nhân.">
+  <title>SpendWise</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Thanh điều hướng chính">
+      <a class="brand" href="#" aria-label="SpendWise trang chủ">
+        <span class="brand-mark">S</span>
+        <span>SpendWise</span>
+      </a>
+      <p class="user-label">Nguyễn Văn A</p>
+      <nav class="primary-nav">
+        <a class="nav-link active" href="#overview"><span class="nav-icon">▦</span> Tổng quan</a>
+        <a class="nav-link" href="#transactions"><span class="nav-icon">↔</span> Giao dịch</a>
+        <a class="nav-link" href="#goals"><span class="nav-icon">◎</span> Mục tiêu tiết kiệm</a>
+        <a class="nav-link" href="#notifications"><span class="nav-icon">♧</span> Thông báo</a>
+        <a class="nav-link" href="#profile"><span class="nav-icon">♙</span> Hồ sơ</a>
+        <a class="nav-link" href="#settings"><span class="nav-icon">⚙</span> Cài đặt</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <span class="avatar">N</span>
+        <div><strong>Nguyễn Văn A</strong><small>Gói cá nhân</small></div>
+        <button class="icon-button" type="button" aria-label="Tùy chọn tài khoản">•••</button>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">BẢNG ĐIỀU KHIỂN</p>
+          <h1>Tổng quan tháng 06</h1>
+          <p class="subtitle">Theo dõi chi tiêu và làm chủ kế hoạch tài chính của bạn.</p>
+        </div>
+        <div class="topbar-actions">
+          <label class="search-box" for="searchInput">
+            <span aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="Tìm kiếm nhanh..." autocomplete="off">
+          </label>
+          <button class="user-chip" type="button" aria-label="Ngôn ngữ hiện tại">US</button>
+          <button class="mobile-menu" id="mobileMenuBtn" type="button" aria-label="Mở menu">☰</button>
+        </div>
+      </header>
+
+      <section class="summary-grid" aria-label="Tóm tắt tài chính">
+        <article class="summary-card">
+          <span class="summary-icon mint">↘</span>
+          <p class="metric-label">Đã chi tiêu</p>
+          <h2>18,4 <span>tr</span></h2>
+          <p class="metric-note"><span class="dot green"></span> Trong ngân sách tháng</p>
+        </article>
+        <article class="summary-card">
+          <span class="summary-icon blue">◈</span>
+          <p class="metric-label">Còn lại</p>
+          <h2>6,2 <span>tr</span></h2>
+          <p class="metric-note">Ngân sách khả dụng</p>
+        </article>
+        <article class="summary-card">
+          <span class="summary-icon purple">▥</span>
+          <p class="metric-label">Tiến độ ngân sách</p>
+          <h2>72<span>%</span></h2>
+          <div class="progress-track" aria-label="Đã sử dụng 72% ngân sách"><span></span></div>
+        </article>
+        <article class="summary-card">
+          <span class="summary-icon orange">↗</span>
+          <p class="metric-label">So với tháng trước</p>
+          <h2 class="positive">+8<span>%</span></h2>
+          <p class="metric-note">Hiệu quả chi tiêu tăng</p>
+        </article>
+      </section>
+
+      <section class="insight-panel" id="transactions" aria-labelledby="insightTitle">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">GỢI Ý TỪ SPENDWISE AI</p>
+            <h2 id="insightTitle">AI Spending Pattern Insight</h2>
+          </div>
+          <div class="panel-controls">
+            <label class="sr-only" for="statusFilter">Lọc theo trạng thái</label>
+            <select id="statusFilter">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="done">Hoàn tất</option>
+              <option value="rejected">Từ chối</option>
+              <option value="pending">Đang chờ</option>
+            </select>
+            <button class="primary-button" id="openModalBtn" type="button"><span>＋</span> Thêm mới</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Phát hiện</th><th>Chi tiết</th><th>Tác động</th><th>Trạng thái</th><th><span class="sr-only">Thao tác</span></th></tr>
+            </thead>
+            <tbody id="insightRows">
+              <!-- Dữ liệu được render bằng JavaScript -->
+            </tbody>
+          </table>
+          <div class="empty-state" id="emptyState" hidden>
+            <span>⌕</span>
+            <strong>Không tìm thấy kết quả</strong>
+            <p>Thử từ khóa khác hoặc thay đổi bộ lọc trạng thái nhé.</p>
+          </div>
+        </div>
+        <footer class="table-footer">
+          <span id="resultCount">3 gợi ý</span>
+          <span>Dữ liệu minh họa · Cập nhật hôm nay</span>
+        </footer>
+      </section>
+
+      <section class="bottom-grid" aria-label="Thông tin bổ sung">
+        <article class="mini-panel" id="goals">
+          <div class="mini-panel-heading"><div><p class="eyebrow">MỤC TIÊU</p><h2>Quỹ tiết kiệm</h2></div><span class="mini-icon">◎</span></div>
+          <div class="goal-line"><span>Du lịch mùa hè</span><strong>65%</strong></div>
+          <div class="progress-track goal-progress"><span></span></div>
+          <p class="muted">6.500.000đ / 10.000.000đ</p>
+        </article>
+        <article class="mini-panel" id="notifications">
+          <div class="mini-panel-heading"><div><p class="eyebrow">NHẮC NHỞ</p><h2>Thói quen tốt</h2></div><span class="mini-icon">✦</span></div>
+          <p class="habit-text">Bạn đã ghi lại chi tiêu trong <strong>5 ngày liên tiếp</strong>. Duy trì nhịp độ này để hiểu rõ dòng tiền của mình!</p>
+        </article>
+      </section>
+      <footer class="page-footer"><span>SW-06 · User Dashboard</span><span>SpendWise <b>•</b> Chi tiêu thông minh hơn</span></footer>
+    </main>
+  </div>
+
+  <dialog class="modal" id="insightModal" aria-labelledby="modalTitle">
+    <form id="insightForm" method="dialog">
+      <div class="modal-heading">
+        <div><p class="eyebrow">QUẢN LÝ GỢI Ý</p><h2 id="modalTitle">Thêm gợi ý mới</h2></div>
+        <button class="icon-button close-modal" id="closeModalBtn" type="button" aria-label="Đóng">✕</button>
+      </div>
+      <label for="findingInput">Phát hiện</label>
+      <input id="findingInput" name="finding" required maxlength="80" placeholder="Ví dụ: Chi tiêu ăn uống tăng">
+      <label for="detailInput">Chi tiết</label>
+      <input id="detailInput" name="detail" required maxlength="120" placeholder="Mô tả ngắn về phát hiện">
+      <label for="impactInput">Tác động</label>
+      <input id="impactInput" name="impact" required maxlength="80" placeholder="Ví dụ: Tiết kiệm 300.000đ">
+      <label for="newStatus">Trạng thái</label>
+      <select id="newStatus" name="status">
+        <option value="pending">Đang chờ</option>
+        <option value="done">Hoàn tất</option>
+        <option value="rejected">Từ chối</option>
+      </select>
+      <p class="form-error" id="formError" role="alert"></p>
+      <div class="modal-actions">
+        <button class="secondary-button" id="cancelModalBtn" type="button">Hủy</button>
+        <button class="primary-button" type="submit">Lưu gợi ý</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
