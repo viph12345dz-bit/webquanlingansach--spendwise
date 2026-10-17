@@ -1,4 +1,0 @@
-Thiết kế prototype hiện tại được thực hiện trên Canva.
-Canva: https://canva.link/8jp4rw8txy5u4gy
-
-Nếu giảng viên yêu cầu Figma, thay dòng trên bằng link Figma chính thức của nhóm.
