@@ -1,0 +1,85 @@
+.landing-page {
+    min-height: 100vh;
+    padding: 32px 5vw 45px;
+    background: #f5f8f7;
+}
+
+.landing-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.landing-nav {
+    display: flex;
+    gap: 24px;
+    color: #738589;
+}
+
+.landing-main {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 7vw;
+    align-items: center;
+    min-height: 75vh;
+}
+
+.landing-copy h1 {
+    margin: 0 0 25px;
+    font-size: 64px;
+    line-height: 1;
+}
+
+.landing-copy p {
+    max-width: 600px;
+    color: #738589;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.landing-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+}
+
+.landing-art {
+    min-height: 420px;
+    padding: 35px;
+    background: #0d2b31;
+}
+
+.art-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.art-row span,
+.art-big {
+    display: block;
+    min-height: 95px;
+    background: white;
+}
+
+.art-row .mint-box {
+    background: #e5f8f1;
+}
+
+.art-big {
+    min-height: 220px;
+    margin-top: 16px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.feature-card {
+    padding: 22px;
+    border: 1px solid #dfe8e5;
+    background: white;
+}

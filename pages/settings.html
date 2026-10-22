@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpendWise - Quản lý ngân sách và thói quen chi tiêu">
+    <title>Cài đặt | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/modules/settings.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar">
+            <a class="brand" href="home.html">SpendWise</a>
+            <div id="roleBadge" class="role-badge"></div>
+
+            <nav id="sidebarNav" class="nav-list" aria-label="Điều hướng chính"></nav>
+
+            <div class="sidebar-bottom">
+                <button id="logoutBtn" class="btn btn-outline" type="button">Đăng xuất</button>
+            </div>
+        </aside>
+
+        <div class="app-area">
+            <header class="topbar">
+                <button id="mobileMenu" class="mobile-menu" type="button" aria-label="Mở menu">☰</button>
+
+                <div class="search-wrap">
+                    <label class="visually-hidden" for="globalSearch">Tìm kiếm nhanh</label>
+                    <input id="globalSearch" class="search-input" type="search" placeholder="Tìm kiếm nhanh...">
+                </div>
+
+                <div id="userInitials" class="avatar">US</div>
+            </header>
+
+            <main class="content-area">
+                <header class="page-heading">
+                    <h1>Cài đặt</h1>
+                    <span class="screen-code">SW-20 • Settings</span>
+                </header>
+
+                <section id="stats" class="stats-grid" aria-label="Tóm tắt cài đặt"></section>
+
+                <section class="panel">
+                    <header class="panel-header">
+                        <h2>Tùy chọn tài khoản</h2>
+                    </header>
+
+                    <form id="settingsForm" class="settings-grid">
+                        <article class="setting-card">
+                            <h3>Giao diện</h3>
+                            <div class="field">
+                                <label for="theme">Chế độ</label>
+                                <select id="theme">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                </select>
+                            </div>
+                        </article>
+
+                        <article class="setting-card">
+                            <h3>Thiết lập</h3>
+                            <div class="field">
+                                <label for="currency">Tiền tệ</label>
+                                <select id="currency">
+                                    <option value="VND">VND</option>
+                                    <option value="USD">USD</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="timezone">Múi giờ</label>
+                                <select id="timezone">
+                                    <option value="GMT+7">GMT+7</option>
+                                    <option value="GMT+8">GMT+8</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label for="twofa">2FA mô phỏng</label>
+                                <select id="twofa">
+                                    <option value="off">Tắt</option>
+                                    <option value="on">Bật</option>
+                                </select>
+                            </div>
+                        </article>
+
+                        <article class="setting-card">
+                            <h3>Dữ liệu</h3>
+                            <p class="muted">Xóa dữ liệu nghiệp vụ của tài khoản hiện tại.</p>
+                            <button id="clearDataBtn" class="btn btn-danger" type="button">Xóa dữ liệu</button>
+                        </article>
+
+                        <article class="setting-card">
+                            <h3>Phiên đăng nhập</h3>
+                            <p class="muted">Đăng xuất để chuyển sang tài khoản khác.</p>
+                            <button id="logoutMainBtn" class="btn btn-outline" type="button">Đăng xuất</button>
+                        </article>
+                    </form>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="modalOverlay" class="modal-overlay hidden"></div>
+
+    <script src="../js/main.js" defer></script>
+    <script src="../js/modules/settings.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpendWise - Quản lý ngân sách và thói quen chi tiêu">
+    <title>Đăng ký | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/modules/register.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <main class="auth-page">
+        <section class="auth-side">
+            <a class="brand" href="home.html">SpendWise</a>
+            <h1>Tiền rõ ràng.<br>Tương lai nhẹ nhàng.</h1>
+            <span class="screen-code">SW-04 • Register</span>
+        </section>
+
+        <section class="auth-main">
+            <form id="registerForm" class="auth-card">
+                <h2>Tạo tài khoản</h2>
+                <p class="muted">Bắt đầu xây thói quen tài chính tốt hơn hôm nay.</p>
+
+                <div class="field">
+                    <label for="name">Họ và tên</label>
+                    <input id="name" type="text" required>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" required>
+                </div>
+
+                <div class="field">
+                    <label for="password">Mật khẩu</label>
+                    <input id="password" type="password" minlength="6" required>
+                </div>
+
+                <div class="field">
+                    <label for="confirmPassword">Nhập lại mật khẩu</label>
+                    <input id="confirmPassword" type="password" minlength="6" required>
+                </div>
+
+                <div class="field">
+                    <label for="role">Loại tài khoản</label>
+                    <select id="role">
+                        <option value="user">Người dùng</option>
+                        <option value="coach">Coach tài chính</option>
+                        <option value="moderator">Kiểm duyệt viên</option>
+                        <option value="admin">Quản trị viên</option>
+                    </select>
+                </div>
+
+                <p id="message" class="form-message"></p>
+
+                <button class="btn btn-primary btn-block" type="submit">Đăng ký</button>
+
+                <nav class="auth-links" aria-label="Liên kết tài khoản">
+                    <span>Đã có tài khoản?</span>
+                    <a href="login.html">Đăng nhập</a>
+                </nav>
+            </form>
+        </section>
+    </main>
+
+    <script src="../js/main.js" defer></script>
+    <script src="../js/modules/register.js" defer></script>
+</body>
+</html>

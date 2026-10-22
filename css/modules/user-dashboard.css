@@ -1,0 +1,9 @@
+#insightContent .insight-card {
+    margin-bottom: 12px;
+    padding: 16px;
+    border: 1px solid #dfe8e5;
+}
+
+#insightContent .insight-card h3 {
+    margin-top: 0;
+}

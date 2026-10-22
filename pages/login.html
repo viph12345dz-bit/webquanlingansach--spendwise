@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpendWise - Quản lý ngân sách và thói quen chi tiêu">
+    <title>Đăng nhập | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/modules/login.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <main class="auth-page">
+        <section class="auth-side">
+            <a class="brand" href="home.html">SpendWise</a>
+            <h1>Tiền rõ ràng.<br>Tương lai nhẹ nhàng.</h1>
+            <span class="screen-code">SW-03 • Login</span>
+        </section>
+
+        <section class="auth-main">
+            <form id="loginForm" class="auth-card">
+                <h2>Chào mừng trở lại</h2>
+                <p class="muted">Đăng nhập để tiếp tục quản lý ngân sách.</p>
+
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" required placeholder="Email">
+                </div>
+
+                <div class="field">
+                    <label for="password">Mật khẩu</label>
+                    <input id="password" type="password" required placeholder="Mật khẩu">
+                </div>
+
+                <p id="message" class="form-message"></p>
+
+                <button class="btn btn-primary btn-block" type="submit">Đăng nhập</button>
+
+                <nav class="auth-links" aria-label="Liên kết tài khoản">
+                    <a href="forgot-password.html">Quên mật khẩu?</a>
+                    <span>•</span>
+                    <a href="register.html">Đăng ký</a>
+                </nav>
+            </form>
+        </section>
+    </main>
+
+    <script src="../js/main.js" defer></script>
+    <script src="../js/modules/login.js" defer></script>
+</body>
+</html>

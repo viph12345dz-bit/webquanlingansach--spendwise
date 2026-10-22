@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpendWise - Quản lý ngân sách và thói quen chi tiêu">
+    <title>Tổng quan | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/modules/user-dashboard.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar">
+            <a class="brand" href="home.html">SpendWise</a>
+            <div id="roleBadge" class="role-badge"></div>
+
+            <nav id="sidebarNav" class="nav-list" aria-label="Điều hướng chính"></nav>
+
+            <div class="sidebar-bottom">
+                <button id="logoutBtn" class="btn btn-outline" type="button">Đăng xuất</button>
+            </div>
+        </aside>
+
+        <div class="app-area">
+            <header class="topbar">
+                <button id="mobileMenu" class="mobile-menu" type="button" aria-label="Mở menu">☰</button>
+
+                <div class="search-wrap">
+                    <label class="visually-hidden" for="globalSearch">Tìm kiếm nhanh</label>
+                    <input id="globalSearch" class="search-input" type="search" placeholder="Tìm kiếm nhanh...">
+                </div>
+
+                <div id="userInitials" class="avatar">US</div>
+            </header>
+
+            <main class="content-area">
+                <header class="page-heading">
+                    <h1>Tổng quan</h1>
+                    <span class="screen-code">SW-06 • User Dashboard</span>
+                </header>
+
+                <section id="stats" class="stats-grid" aria-label="Thống kê tổng quan"></section>
+
+                <section class="panel">
+                    <header class="panel-header">
+                        <h2>AI Spending Pattern Insight</h2>
+                        <div class="panel-tools">
+                            <select id="statusFilter" class="filter-select" aria-label="Lọc trạng thái">
+                                <option value="all">Tất cả trạng thái</option>
+                                <option value="Hoàn tất">Hoàn tất</option>
+                                <option value="Từ chối">Từ chối</option>
+                            </select>
+                            <button id="analyzeBtn" class="btn btn-primary" type="button">+ Phân tích mới</button>
+                        </div>
+                    </header>
+
+                    <div id="insightContent"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="modalOverlay" class="modal-overlay hidden"></div>
+
+    <script src="../js/main.js" defer></script>
+    <script src="../js/modules/user-dashboard.js" defer></script>
+</body>
+</html>

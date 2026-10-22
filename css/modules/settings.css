@@ -1,0 +1,14 @@
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.setting-card {
+    padding: 18px;
+    border: 1px solid #dfe8e5;
+}
+
+.setting-card h3 {
+    margin-top: 0;
+}

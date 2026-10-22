@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SpendWise - Quản lý ngân sách và thói quen chi tiêu">
+    <title>Hồ sơ cá nhân | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/modules/profile.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar">
+            <a class="brand" href="home.html">SpendWise</a>
+            <div id="roleBadge" class="role-badge"></div>
+
+            <nav id="sidebarNav" class="nav-list" aria-label="Điều hướng chính"></nav>
+
+            <div class="sidebar-bottom">
+                <button id="logoutBtn" class="btn btn-outline" type="button">Đăng xuất</button>
+            </div>
+        </aside>
+
+        <div class="app-area">
+            <header class="topbar">
+                <button id="mobileMenu" class="mobile-menu" type="button" aria-label="Mở menu">☰</button>
+
+                <div class="search-wrap">
+                    <label class="visually-hidden" for="globalSearch">Tìm kiếm nhanh</label>
+                    <input id="globalSearch" class="search-input" type="search" placeholder="Tìm kiếm nhanh...">
+                </div>
+
+                <div id="userInitials" class="avatar">US</div>
+            </header>
+
+            <main class="content-area">
+                <header class="page-heading">
+                    <h1>Hồ sơ cá nhân</h1>
+                    <span class="screen-code">SW-19 • Profile</span>
+                </header>
+
+                <section id="stats" class="stats-grid" aria-label="Thông tin tài khoản"></section>
+
+                <section class="panel">
+                    <header class="panel-header">
+                        <h2>Thông tin cá nhân</h2>
+                    </header>
+
+                    <form id="profileForm" class="profile-form">
+                        <div class="field">
+                            <label for="displayName">Tên hiển thị</label>
+                            <input id="displayName" type="text" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="profileEmail">Email</label>
+                            <input id="profileEmail" type="email" disabled>
+                        </div>
+
+                        <div class="field">
+                            <label for="phone">Số điện thoại</label>
+                            <input id="phone" type="text" placeholder="Ví dụ: 0912345678">
+                        </div>
+
+                        <div class="field">
+                            <label for="profileTimezone">Múi giờ</label>
+                            <select id="profileTimezone">
+                                <option value="GMT+7">GMT+7 • Việt Nam</option>
+                                <option value="GMT+8">GMT+8</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+                    </form>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="modalOverlay" class="modal-overlay hidden"></div>
+
+    <script src="../js/main.js" defer></script>
+    <script src="../js/modules/profile.js" defer></script>
+</body>
+</html>

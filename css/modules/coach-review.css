@@ -1,0 +1,4 @@
+.data-table td:nth-child(2),
+.data-table td:nth-child(3) {
+    font-weight: bold;
+}
