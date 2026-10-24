@@ -2,6 +2,14 @@
     box-sizing: border-box;
 }
 
+:root {
+    --color-ink: #123038;
+    --color-muted: #738589;
+    --color-accent: #39c9a1;
+    --color-surface: #ffffff;
+    --color-border: #e7eeec;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -35,6 +43,15 @@ button {
     cursor: pointer;
 }
 
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #168a70;
+    outline-offset: 2px;
+}
+
 .hidden {
     display: none !important;
 }
@@ -44,6 +61,10 @@ button {
 }
 
 .dark .muted {
+    color: #9eb0b4;
+}
+
+.dark .form-hint {
     color: #9eb0b4;
 }
 
@@ -135,6 +156,20 @@ button {
     color: #13815e;
 }
 
+.form-hint {
+    margin-top: -8px;
+    color: #738589;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.demo-label {
+    display: inline-block;
+    margin-left: 6px;
+    color: #738589;
+    font-size: 12px;
+}
+
 .toast {
     position: fixed;
     top: 20px;
@@ -201,6 +236,10 @@ button {
 .nav-link.active {
     background: #173d45;
     color: white;
+}
+
+.nav-link.active {
+    box-shadow: inset 3px 0 0 var(--color-accent);
 }
 
 .sidebar-bottom {
@@ -506,6 +545,19 @@ button {
 
 .dark .empty-state strong {
     color: #eef8f5;
+}
+
+.dark .page-heading h1,
+.dark .panel-header h2 {
+    color: #eef8f5;
+}
+
+.dark .nav-link.active {
+    background: #173d45;
+}
+
+.dark .data-table th {
+    color: #b8c8ca;
 }
 
 .visually-hidden {

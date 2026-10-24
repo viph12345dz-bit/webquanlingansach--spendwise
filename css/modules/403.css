@@ -52,3 +52,12 @@
     background: #f4f7f6;
     content: '';
 }
+
+.error-copy .muted {
+    max-width: 520px;
+    line-height: 1.6;
+}
+
+.error-copy .btn {
+    margin-top: 12px;
+}

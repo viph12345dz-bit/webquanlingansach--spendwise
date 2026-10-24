@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quản lý mẫu gợi ý AI mô phỏng trong SpendWise">
+    <title>Quản lý mẫu AI | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/modules/moderator-ai-template-management.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar">
+            <a class="brand" href="home.html">SpendWise</a>
+            <div id="roleBadge" class="role-badge"></div>
+            <nav id="sidebarNav" class="nav-list" aria-label="Điều hướng chính"></nav>
+            <div class="sidebar-bottom">
+                <button id="logoutBtn" class="btn btn-outline" type="button">Đăng xuất</button>
+            </div>
+        </aside>
+        <div class="app-area">
+            <header class="topbar">
+                <button id="mobileMenu" class="mobile-menu" type="button"
+                    aria-label="Mở menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+                <div class="search-wrap">
+                    <label class="visually-hidden" for="globalSearch">Tìm mẫu AI</label>
+                    <input id="globalSearch" class="search-input" type="search" placeholder="Tìm mẫu...">
+                </div>
+                <div id="userInitials" class="avatar" aria-label="Người dùng hiện tại">US</div>
+            </header>
+            <main class="content-area">
+                <header class="page-heading">
+                    <h1>Mẫu AI mô phỏng</h1>
+                    <span class="screen-code">MODERATOR • DEMO</span>
+                </header>
+                <p class="muted page-note">
+                    Mẫu được lưu trong LocalStorage của trình duyệt. Trang này không gọi AI thật.
+                </p>
+                <section id="stats" class="stats-grid" aria-label="Thống kê mẫu AI"></section>
+                <section class="panel">
+                    <header class="panel-header">
+                        <h2>Thư viện mẫu</h2>
+                        <div class="panel-tools">
+                            <label class="visually-hidden" for="statusFilter">Lọc trạng thái</label>
+                            <select id="statusFilter" class="filter-select">
+                                <option value="all">Tất cả</option>
+                                <option value="active">Đang hoạt động</option>
+                                <option value="draft">Bản nháp</option>
+                            </select>
+                            <button id="addBtn" class="btn btn-primary" type="button">+ Thêm mẫu</button>
+                        </div>
+                    </header>
+                    <div id="tableContent" aria-live="polite"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <div id="modalOverlay" class="modal-overlay hidden"></div>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/api.js" defer></script>
+    <script src="../js/modules/moderator-ai-template-management.js" defer></script>
+</body>
+</html>
