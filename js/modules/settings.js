@@ -37,37 +37,69 @@ if (user) {
         settings.timezone = timezone.value;
         settings.twofa = twofa.value;
 
-        saveUserData('settings', settings);
+        if (!saveUserData('settings', settings)) return;
         applyTheme();
         renderPage();
         showToast('Đã lưu cài đặt.');
     });
 
     clearDataBtn.addEventListener('click', function () {
-        if (!confirmDelete('Xóa dữ liệu nghiệp vụ của tài khoản này?')) {
-            return;
+        const changes = [];
+        let applied = 0;
+        try {
+            if (!canWriteAppData() || !confirmDelete('Xóa dữ liệu nghiệp vụ của tài khoản này?') ||
+                !canWriteAppData()) return;
+            const shared = [
+                { key: 'sw_transactions', field: 'userId' },
+                { key: 'sw_goals', field: 'userId' },
+                { key: 'sw_budgets', field: 'userId' },
+                { key: 'sw_notifications', field: 'userId' },
+                { key: 'sw_coachNotes', field: 'coachId' },
+                { key: 'sw_resources', field: 'coachId' }
+            ];
+            // Chuẩn bị đủ thay đổi trước khi ghi; giữ dữ liệu owner khác.
+            for (let i = 0; i < shared.length; i++) {
+                const spec = shared[i];
+                const previous = localStorage.getItem(spec.key);
+                if (previous === null) continue;
+                const items = JSON.parse(previous);
+                if (!Array.isArray(items) || items.some(function (item) {
+                    return !item || typeof item !== 'object' || Array.isArray(item);
+                })) throw new Error('Dữ liệu ' + spec.key + ' không hợp lệ.');
+                const remaining = items.filter(function (item) {
+                    if (spec.key === 'sw_coachNotes' && !item.coachId) return item.userId !== user.id;
+                    return item[spec.field] !== user.id;
+                });
+                if (remaining.length !== items.length) {
+                    changes.push({ key: spec.key, previous: previous, next: JSON.stringify(remaining) });
+                }
+            }
+            const legacyNames = ['transactions', 'goals', 'insights', 'goalPlans', 'notifications',
+                'clients', 'reviews', 'coachNotes', 'reviewsMigrated', 'budgets', 'resources',
+                'moderation', 'templates', 'aiTemplates', 'feedback', 'categories', 'services'];
+            const privateKeys = ['sw_sv1_ai_' + user.id];
+            legacyNames.forEach(function (name) { privateKeys.push('spendwise_' + user.id + '_' + name); });
+            privateKeys.forEach(function (key) {
+                const previous = localStorage.getItem(key);
+                if (previous !== null) changes.push({ key: key, previous: previous, next: null });
+            });
+            if (!canWriteAppData()) return;
+            for (let i = 0; i < changes.length; i++) {
+                const change = changes[i];
+                if (change.next === null) localStorage.removeItem(change.key);
+                else localStorage.setItem(change.key, change.next);
+                applied++;
+            }
+            showToast('Đã xóa dữ liệu nghiệp vụ của tài khoản này.', 'warning');
+        } catch (error) {
+            let restored = true;
+            for (let i = applied - 1; i >= 0; i--) {
+                try { localStorage.setItem(changes[i].key, changes[i].previous); }
+                catch (restoreError) { restored = false; }
+            }
+            showToast('Không xóa được dữ liệu. ' + error.message +
+                (restored ? '' : ' Chưa khôi phục đủ dữ liệu; hãy kiểm tra quyền lưu trữ.'), 'error');
         }
-
-        const keys = [
-            'transactions',
-            'goals',
-            'insights',
-            'notifications',
-            'clients',
-            'reviews',
-            'resources',
-            'moderation',
-            'templates',
-            'feedback',
-            'categories',
-            'services'
-        ];
-
-        for (let i = 0; i < keys.length; i++) {
-            localStorage.removeItem(getUserKey(keys[i]));
-        }
-
-        showToast('Đã xóa dữ liệu.', 'warning');
     });
 
     logoutMainBtn.addEventListener('click', logout);

@@ -158,7 +158,7 @@ if (templateModerator) {
         item.status = status;
         item.updatedAt = new Date().toISOString();
 
-        saveUserData('aiTemplates', templates);
+        if (!saveUserData('aiTemplates', templates)) return;
         closeModal();
         showToast('Đã lưu mẫu AI demo.');
         renderPage();
@@ -176,7 +176,7 @@ if (templateModerator) {
         item.version = Number(item.version || 1) + 1;
         item.updatedAt = new Date().toISOString();
 
-        saveUserData('aiTemplates', templates);
+        if (!saveUserData('aiTemplates', templates)) return;
         showToast('Đã cập nhật trạng thái và phiên bản.');
         renderPage();
     }

@@ -308,6 +308,13 @@
                 invalidate('Bản nháp đã đổi; cần tạo và chấp nhận lại.');
                 return;
             }
+            const choiceError = config.checkChoice($('aiChoice').value);
+            if (choiceError) {
+                approved = false;
+                $('aiSave').disabled = true;
+                say('aiMessage', choiceError);
+                return;
+            }
             if (config.save($('aiChoice').value, draft)) {
                 invalidate('Đã lưu lựa chọn vào dữ liệu của bạn.');
                 config.render();
@@ -348,14 +355,36 @@
         return names;
     }
 
+    function availableCategoryNames() {
+        const hiddenNames = readList('sw_categories').filter(function (item) {
+            return item.status === 'Tạm ẩn';
+        }).map(function (item) {
+            return String(item.name || '').trim().toLowerCase();
+        });
+        return categoryNames().filter(function (name) {
+            return !hiddenNames.includes(name.trim().toLowerCase());
+        });
+    }
+
+    function formCategoryNames() {
+        const names = availableCategoryNames();
+        const existing = editingId ? findOwn('sw_transactions', editingId) : null;
+        // Khi sửa, giữ danh mục lịch sử của chính giao dịch đang mở.
+        if (existing && typeof existing.category === 'string' && !names.includes(existing.category)) {
+            names.push(existing.category);
+        }
+        return names;
+    }
+
     function loadCategories() {
         const names = categoryNames();
+        const formNames = formCategoryNames();
         const selected = $('category').value;
         const filter = $('categoryFilter').value;
-        $('category').innerHTML = htmlOptions(names);
-        $('aiChoice').innerHTML = htmlOptions(names);
+        $('category').innerHTML = htmlOptions(formNames);
+        $('aiChoice').innerHTML = htmlOptions(availableCategoryNames());
         $('categoryFilter').innerHTML = '<option value="">Tất cả danh mục</option>' + htmlOptions(names);
-        if (names.includes(selected)) {
+        if (formNames.includes(selected)) {
             $('category').value = selected;
         }
         if (names.includes(filter)) {
@@ -384,7 +413,7 @@
         if (!validMoney(Number($('amount').value), false)) {
             return 'Số tiền phải là số nguyên từ 1 đến 1.000.000.000.000 đồng.';
         }
-        if (!categoryNames().includes($('category').value)) {
+        if (!formCategoryNames().includes($('category').value)) {
             return 'Hãy chọn danh mục hợp lệ.';
         }
         return '';
@@ -393,6 +422,7 @@
     function resetForm() {
         editingId = null;
         editingSnapshot = null;
+        loadCategories();
         $('transactionForm').reset();
         $('date').value = today();
         $('formTitle').textContent = 'Thêm giao dịch';
@@ -503,6 +533,7 @@
         create: function () {
             const text = $('note').value.trim().toLowerCase();
             const categories = readList('sw_categories');
+            const available = availableCategoryNames();
             let found = null;
             let keyword = '';
             let source = 'danh mục dùng chung';
@@ -510,7 +541,7 @@
                 const words = Array.isArray(item.keywords) ? item.keywords : String(item.keywords || '').split(',');
                 words.forEach(function (word) {
                     const term = String(word).trim().toLowerCase();
-                    if (!found && term && text.includes(term) && item.name) {
+                    if (!found && term && text.includes(term) && available.includes(item.name)) {
                         found = item.name;
                         keyword = term;
                     }
@@ -520,7 +551,7 @@
                 source = 'quy tắc DEMO của trang USER';
                 demoRules.forEach(function (rule) {
                     rule.words.forEach(function (word) {
-                        if (!found && text.includes(word)) {
+                        if (!found && text.includes(word) && available.includes(rule.name)) {
                             found = rule.name;
                             keyword = word;
                         }
@@ -535,6 +566,9 @@
             } else if (found === 'Thu nhập') {
                 return null;
             }
+            if (!available.includes(found)) {
+                return null;
+            }
             previousCategory = $('category').value;
             return {
                 signature: signature(),
@@ -546,7 +580,7 @@
             };
         },
         checkChoice: function (value) {
-            return categoryNames().includes(value) ? '' : 'Danh mục không hợp lệ.';
+            return availableCategoryNames().includes(value) ? '' : 'Danh mục không hợp lệ hoặc đã tạm ẩn.';
         },
         apply: function (value) {
             $('category').value = value;

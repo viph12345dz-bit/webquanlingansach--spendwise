@@ -36,18 +36,7 @@ if (categoryAdmin) {
     ];
 
     function getCategories() {
-        const savedCategories = getUserData('categories', null);
-
-        if (Array.isArray(savedCategories) && savedCategories.length > 0) {
-            return savedCategories;
-        }
-
-        // Persist clearly labeled demo rows so pages sharing sw_categories can read them.
-        const starterCategories = demoCategories.map(function (item) {
-            return Object.assign({}, item);
-        });
-        saveUserData('categories', starterCategories);
-        return starterCategories;
+        return getUserData('categories', []);
     }
 
     function updateGroupFilter(categories) {
@@ -249,7 +238,7 @@ if (categoryAdmin) {
         item.status = status;
         item.updatedAt = new Date().toISOString();
 
-        saveUserData('categories', categories);
+        if (!saveUserData('categories', categories)) return;
         closeModal();
         showToast('Đã lưu danh mục dùng chung.');
         renderPage();
@@ -257,6 +246,23 @@ if (categoryAdmin) {
 
     document.getElementById('addBtn').addEventListener('click', function () {
         openForm(null);
+    });
+    const loadDemoButton = document.createElement('button');
+    loadDemoButton.id = 'loadDemoBtn';
+    loadDemoButton.className = 'btn btn-outline';
+    loadDemoButton.type = 'button';
+    loadDemoButton.textContent = 'Nạp dữ liệu demo';
+    document.querySelector('.panel-tools').appendChild(loadDemoButton);
+    loadDemoButton.addEventListener('click', function () {
+        if (!canWriteAppData()) return;
+        if (getCategories().length > 0) {
+            showToast('Chỉ nạp demo vào danh sách danh mục rỗng để tránh ghi đè dữ liệu.', 'warning');
+            return;
+        }
+        const demoItems = demoCategories.map(function (item) { return Object.assign({}, item); });
+        if (!saveUserData('categories', demoItems)) return;
+        renderPage();
+        showToast('Đã nạp dữ liệu DEMO theo lựa chọn của bạn.');
     });
     searchInput.addEventListener('input', renderPage);
     groupFilter.addEventListener('change', renderPage);

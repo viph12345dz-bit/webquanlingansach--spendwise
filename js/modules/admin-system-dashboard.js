@@ -32,15 +32,7 @@ if (systemAdmin) {
     ];
 
     function getServices() {
-        const savedServices = getUserData('systemServices', null);
-
-        if (savedServices === null) {
-            return demoServices.map(function (item) {
-                return Object.assign({}, item);
-            });
-        }
-
-        return savedServices;
+        return getUserData('systemServices', []);
     }
 
     function renderPage() {
@@ -199,7 +191,7 @@ if (systemAdmin) {
         item.note = note;
         item.updatedAt = new Date().toISOString();
 
-        saveUserData('systemServices', services);
+        if (!saveUserData('systemServices', services)) return;
         closeModal();
         showToast('Đã lưu cấu hình mô phỏng.');
         renderPage();
@@ -213,13 +205,34 @@ if (systemAdmin) {
         const services = getServices().filter(function (item) {
             return item.id !== id;
         });
-        saveUserData('systemServices', services);
+        if (!saveUserData('systemServices', services)) return;
         showToast('Đã xóa cấu hình demo.');
         renderPage();
     }
 
     document.getElementById('addBtn').addEventListener('click', function () {
         openForm(null);
+    });
+    const loadDemoButton = document.createElement('button');
+    loadDemoButton.id = 'loadDemoBtn';
+    loadDemoButton.className = 'btn btn-outline';
+    loadDemoButton.type = 'button';
+    loadDemoButton.textContent = 'Nạp dữ liệu demo';
+    const demoTools = document.createElement('div');
+    demoTools.className = 'panel-tools';
+    const addButton = document.getElementById('addBtn');
+    addButton.insertAdjacentElement('beforebegin', demoTools);
+    demoTools.append(addButton, loadDemoButton);
+    loadDemoButton.addEventListener('click', function () {
+        if (!canWriteAppData()) return;
+        if (getServices().length > 0) {
+            showToast('Chỉ nạp demo vào danh sách dịch vụ rỗng để tránh ghi đè dữ liệu.', 'warning');
+            return;
+        }
+        const demoItems = demoServices.map(function (item) { return Object.assign({}, item); });
+        if (!saveUserData('systemServices', demoItems)) return;
+        renderPage();
+        showToast('Đã nạp dữ liệu DEMO theo lựa chọn của bạn.');
     });
     searchInput.addEventListener('input', renderPage);
     renderPage();
