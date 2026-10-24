@@ -194,7 +194,7 @@ if (accountAdmin) {
             savedUser.password = password;
         }
 
-        saveUsers(users);
+        if (!saveUsers(users)) return;
         closeModal();
         showToast('Đã lưu tài khoản mô phỏng.');
         renderPage();
@@ -209,7 +209,7 @@ if (accountAdmin) {
         }
 
         item.active = item.active === false;
-        saveUsers(users);
+        if (!saveUsers(users)) return;
         showToast(item.active ? 'Đã bật tài khoản demo.' : 'Đã tắt tài khoản demo.');
         renderPage();
     }

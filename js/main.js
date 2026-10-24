@@ -2,6 +2,7 @@ const STORAGE_USERS = 'spendwise_users';
 const STORAGE_SESSION = 'spendwise_session';
 const STORAGE_THEME = 'spendwise_theme';
 let modalReturnFocus = null;
+let appPageIdentity = null;
 const CONTRACT_USERS = 'sw_users';
 const CONTRACT_SESSION = 'sw_session';
 const SHARED_DATA_KEYS = {
@@ -88,9 +89,45 @@ function getUsers() {
     return readJSON(STORAGE_USERS, readJSON(CONTRACT_USERS, []));
 }
 
+function canWriteAppData() {
+    const current = getCurrentUser();
+    if (appPageIdentity && (!current || current.id !== appPageIdentity.id ||
+        current.role !== appPageIdentity.role)) {
+        showToast('Phiên đã thay đổi. Hãy tải lại trang trước khi lưu.', 'error');
+        return false;
+    }
+    return true;
+}
+
 function saveUsers(users) {
-    writeJSON(STORAGE_USERS, users);
-    writeJSON(CONTRACT_USERS, users);
+    if (!canWriteAppData() || !Array.isArray(users)) {
+        return false;
+    }
+    const keys = [STORAGE_USERS, CONTRACT_USERS];
+    const previous = [];
+    try {
+        for (let i = 0; i < keys.length; i++) {
+            const raw = localStorage.getItem(keys[i]);
+            previous.push(raw);
+            if (raw !== null && !Array.isArray(JSON.parse(raw))) {
+                throw new Error('Kho tài khoản không hợp lệ.');
+            }
+        }
+        for (let i = 0; i < keys.length; i++) {
+            writeJSON(keys[i], users);
+        }
+        return true;
+    } catch (error) {
+        // Khôi phục cả hai bản tài khoản nếu một lần ghi thất bại.
+        for (let i = 0; i < previous.length; i++) {
+            try {
+                if (previous[i] === null) localStorage.removeItem(keys[i]);
+                else localStorage.setItem(keys[i], previous[i]);
+            } catch (restoreError) { /* Giữ nguyên lỗi lưu để người dùng thử lại. */ }
+        }
+        showToast('Không lưu được tài khoản; hãy kiểm tra dữ liệu và dung lượng lưu trữ.', 'error');
+        return false;
+    }
 }
 
 function getSession() {
@@ -188,7 +225,7 @@ function getUserData(name, defaultValue) {
 
                 for (let i = 0; i < migratedValue.length; i++) {
                     if (migratedValue[i] && typeof migratedValue[i] === 'object') {
-                        migratedValue[i].userId = ownerId;
+                        migratedValue[i].userId = migratedValue[i].userId || 'guest';
                     }
                 }
             }
@@ -211,7 +248,7 @@ function getUserData(name, defaultValue) {
             const mergedItems = [];
             const users = getUsers();
             const isUserScoped = USER_SCOPED_DATA.indexOf(name) !== -1;
-            const accounts = isUserScoped ? (user ? [user] : []) : users;
+            const accounts = users;
 
             for (let i = 0; i < accounts.length; i++) {
                 const accountKey = 'spendwise_' + accounts[i].id + '_' + legacyName;
@@ -276,30 +313,47 @@ function normalizeLegacySharedItem(name, item) {
 }
 
 function saveUserData(name, value) {
-    const sharedKey = SHARED_DATA_KEYS[name];
-
-    if (sharedKey) {
-        if (!Array.isArray(value)) {
-            return;
-        }
-
-        if (USER_SCOPED_DATA.indexOf(name) !== -1) {
-            const user = getCurrentUser();
-            const ownerId = user ? user.id : 'guest';
-            const allItems = readJSON(sharedKey, []);
-            const otherUsers = allItems.filter(function (item) {
-                return !item || item.userId !== ownerId;
-            });
-
-            for (let i = 0; i < value.length; i++) value[i].userId = ownerId;
-            writeJSON(sharedKey, otherUsers.concat(value));
-        } else {
-            writeJSON(sharedKey, value);
-        }
-        return;
+    if (!canWriteAppData()) {
+        return false;
     }
-
-    writeJSON(getUserKey(name), value);
+    const sharedKey = SHARED_DATA_KEYS[name];
+    try {
+        if (sharedKey) {
+            if (!Array.isArray(value)) {
+                return false;
+            }
+            const raw = localStorage.getItem(sharedKey);
+            const allItems = raw === null ? [] : JSON.parse(raw);
+            if (!Array.isArray(allItems) || allItems.some(function (item) {
+                return !item || typeof item !== 'object' || Array.isArray(item);
+            })) {
+                throw new Error('Kho dữ liệu dùng chung không hợp lệ.');
+            }
+            if (USER_SCOPED_DATA.indexOf(name) !== -1) {
+                const user = getCurrentUser();
+                const ownerId = user ? user.id : 'guest';
+                const otherUsers = allItems.filter(function (item) {
+                    return item.userId !== ownerId;
+                });
+                const ownedItems = value.map(function (item) {
+                    return Object.assign({}, item, { userId: ownerId });
+                });
+                writeJSON(sharedKey, otherUsers.concat(ownedItems));
+            } else {
+                writeJSON(sharedKey, value);
+            }
+        } else {
+            const key = getUserKey(name);
+            const raw = localStorage.getItem(key);
+            // Không ghi đè kho JSON hỏng bằng dữ liệu rỗng từ màn hình.
+            if (raw !== null) JSON.parse(raw);
+            writeJSON(key, value);
+        }
+        return true;
+    } catch (error) {
+        showToast('Không lưu được dữ liệu; hãy kiểm tra kho dữ liệu và dung lượng trình duyệt.', 'error');
+        return false;
+    }
 }
 
 function formatMoney(value) {
@@ -491,6 +545,7 @@ function setupAppPage(activePage, requiredRole) {
         return null;
     }
 
+    appPageIdentity = { id: user.id, role: user.role };
     applyTheme();
 
     const roleBadge = document.getElementById('roleBadge');

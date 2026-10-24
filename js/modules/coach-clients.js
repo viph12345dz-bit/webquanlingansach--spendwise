@@ -5,6 +5,7 @@ if (user) {
     const statusFilter = document.getElementById('statusFilter');
     const addBtn = document.getElementById('addBtn');
     const tableContent = document.getElementById('tableContent');
+    let editingSnapshot = null;
 
     function renderPage() {
         const items = getUserData('clients', []);
@@ -36,6 +37,7 @@ if (user) {
                         <td>${statusLabel(item.status)}</td>
                         <td>
                             <div class="actions">
+                                <a class="link-button" href="coach-review.html?clientId=${encodeURIComponent(item.id)}">Xem review</a>
                                 <button class="link-button" data-edit="${item.id}" type="button">Sửa</button>
                                 <button class="link-button danger" data-delete="${item.id}" type="button">Xóa</button>
                             </div>
@@ -95,6 +97,13 @@ if (user) {
     function openForm(id) {
         const items = getUserData('clients', []);
         const item = id ? findItemById(items, id) : null;
+        editingSnapshot = item ? JSON.stringify(item) : null;
+        const accountOptions = getUsers().filter(function (account) {
+            return account.role === 'user' && account.active !== false;
+        }).map(function (account) {
+            return '<option value="' + cleanText(account.id) + '">' +
+                cleanText(account.name + ' (' + account.email + ')') + '</option>';
+        }).join('');
 
         openModal(item ? 'Sửa dữ liệu' : 'Thêm dữ liệu', `
             <form id="dataForm">
@@ -105,7 +114,7 @@ if (user) {
 
                     <div class="field">
                         <label for="plan">Kế hoạch</label>
-                        <input id="plan" type="text" required>
+                        <input id="plan" type="number" min="0" max="100" step="0.1" required>
                     </div>
 
                     <div class="field">
@@ -113,6 +122,10 @@ if (user) {
                         <input id="lastReview" type="date" required>
                     </div>
 
+                    <div class="field">
+                        <label for="clientAccount">Tài khoản USER demo liên kết (tùy chọn)</label>
+                        <select id="clientAccount"><option value="">Chưa liên kết</option>${accountOptions}</select>
+                    </div>
                     <div class="field">
                         <label for="status">Trạng thái</label>
                         <select id="status">
@@ -132,6 +145,7 @@ if (user) {
             document.getElementById('plan').value = item.plan;
             document.getElementById('lastReview').value = item.lastReview;
             document.getElementById('status').value = item.status;
+            document.getElementById('clientAccount').value = item.accountId || '';
         }
 
         document.getElementById('dataForm').addEventListener('submit', function (event) {
@@ -143,6 +157,26 @@ if (user) {
     function saveItem(id) {
         const items = getUserData('clients', []);
         let item = id ? findItemById(items, id) : null;
+        const name = document.getElementById('name').value.trim();
+        const planText = document.getElementById('plan').value.trim();
+        const plan = Number(planText);
+        const date = document.getElementById('lastReview').value;
+        const status = document.getElementById('status').value;
+        const accountId = document.getElementById('clientAccount').value;
+        if (!canWriteAppData()) return;
+        if (id && (!item || JSON.stringify(item) !== editingSnapshot)) {
+            showToast('Khách hàng đã thay đổi. Hãy mở lại form Sửa.', 'error');
+            return;
+        }
+        if (name.length < 2 || name.length > 80 || !planText || !Number.isFinite(plan) ||
+            plan < 0 || plan > 100 || !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+            !Number.isFinite(Date.parse(date)) || ['Hoàn tất', 'Cần review'].indexOf(status) === -1 ||
+            (accountId && !getUsers().some(function (account) {
+                return account.id === accountId && account.role === 'user' && account.active !== false;
+            }))) {
+            showToast('Nhập tên, ngày, tỷ lệ 0–100% và tài khoản liên kết hợp lệ.', 'error');
+            return;
+        }
 
         if (!item) {
             item = { id: makeId() };
@@ -153,8 +187,9 @@ if (user) {
         item.plan = document.getElementById('plan').value.trim();
         item.lastReview = document.getElementById('lastReview').value;
         item.status = document.getElementById('status').value;
+        item.accountId = accountId;
 
-        saveUserData('clients', items);
+        if (!saveUserData('clients', items)) return;
         closeModal();
         showToast('Đã lưu dữ liệu.');
         renderPage();
@@ -174,7 +209,7 @@ if (user) {
             }
         }
 
-        saveUserData('clients', newList);
+        if (!saveUserData('clients', newList)) return;
         showToast('Đã xóa dữ liệu.');
         renderPage();
     }

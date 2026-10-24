@@ -6,6 +6,9 @@ if (moderatorUser) {
     const tableContent = document.getElementById('tableContent');
 
     function getReviewStatus(resource) {
+        if (['draft', 'pending', 'approved', 'rejected', 'needs-revision'].indexOf(resource.status) !== -1) {
+            return resource.status;
+        }
         if (resource.status === 'Đã xuất bản' &&
             resource.moderationStatus !== 'approved') {
             return 'pending';
@@ -142,21 +145,23 @@ if (moderatorUser) {
     function bindReviewButtons() {
         const buttons = document.querySelectorAll('[data-review]');
 
+        const visibleResources = getUserData('resources', []);
         for (let i = 0; i < buttons.length; i++) {
+            const expectedSnapshot = JSON.stringify(findItemById(visibleResources, buttons[i].dataset.review));
             buttons[i].addEventListener('click', function () {
                 const id = this.dataset.review;
                 const status = this.dataset.status;
 
                 if (status === 'approved' || status === 'pending') {
-                    saveReview(id, status, '');
+                    saveReview(id, status, '', expectedSnapshot);
                 } else {
-                    openReviewForm(id, status);
+                    openReviewForm(id, status, expectedSnapshot);
                 }
             });
         }
     }
 
-    function openReviewForm(id, status) {
+    function openReviewForm(id, status, expectedSnapshot) {
         const isRejection = status === 'rejected';
         const title = isRejection ? 'Từ chối tài nguyên' : 'Yêu cầu Coach chỉnh sửa';
         const label = isRejection ? 'Lý do từ chối' : 'Nội dung cần chỉnh sửa';
@@ -181,11 +186,11 @@ if (moderatorUser) {
                 return;
             }
 
-            saveReview(id, status, note);
+            saveReview(id, status, note, expectedSnapshot);
         });
     }
 
-    function saveReview(id, status, note) {
+    function saveReview(id, status, note, expectedSnapshot) {
         const resources = getUserData('resources', []);
         const resource = findItemById(resources, id);
 
@@ -195,6 +200,14 @@ if (moderatorUser) {
             return;
         }
 
+        if (!canWriteAppData()) return;
+        if (JSON.stringify(resource) !== expectedSnapshot || getReviewStatus(resource) === 'draft' ||
+            (status !== 'pending' && getReviewStatus(resource) !== 'pending')) {
+            showToast('Tài nguyên hoặc quyết định đã thay đổi. Hãy kiểm tra lại danh sách.', 'error');
+            closeModal();
+            renderPage();
+            return;
+        }
         resource.moderationStatus = status;
         resource.reviewNote = status === 'approved' || status === 'pending' ? '' : note;
         resource.reviewedAt = new Date().toISOString();
@@ -202,13 +215,14 @@ if (moderatorUser) {
         resource.reviewSnapshot = {
             title: resource.title,
             format: resource.format,
-            updated: resource.updated
+            updated: resource.updated,
+            content: resource.content
         };
 
-        // Keep the status values that the current Coach page already understands.
-        resource.status = status === 'approved' ? 'Đã xuất bản' : 'Bản nháp';
+        // Coach và Moderator cùng lưu một trạng thái trong kho tài nguyên chung.
+        resource.status = status;
 
-        saveUserData('resources', resources);
+        if (!saveUserData('resources', resources)) return;
         closeModal();
         showToast('Đã lưu kết quả kiểm duyệt.');
         renderPage();

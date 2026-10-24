@@ -5,6 +5,8 @@ if (feedbackModerator) {
     const statusFilter = document.getElementById('statusFilter');
     const tableContent = document.getElementById('tableContent');
     const statusOptions = ['Mới', 'Đang xử lý', 'Đã giải quyết'];
+    const severityOptions = ['Thấp', 'Vừa', 'Cao'];
+    statusFilter.insertAdjacentHTML('beforeend', '<option value="archived">Đã lưu trữ</option>');
 
     function renderPage() {
         const feedbackItems = getUserData('feedback', []);
@@ -19,7 +21,9 @@ if (feedbackModerator) {
             if (!searchText(searchableText, keyword)) {
                 continue;
             }
-            if (selectedStatus !== 'all' && item.status !== selectedStatus) {
+            if ((selectedStatus === 'archived' && !item.archived) ||
+                (selectedStatus !== 'archived' && (item.archived ||
+                    (selectedStatus !== 'all' && item.status !== selectedStatus)))) {
                 continue;
             }
 
@@ -32,7 +36,7 @@ if (feedbackModerator) {
             }
 
             rows.push(
-                '<tr><td>' + cleanText(item.title || 'Chưa có tiêu đề') + '</td>' +
+                '<tr><td>' + cleanText(item.title || 'Chưa có tiêu đề') + '<p class="muted">Mức độ: ' + cleanText(item.severity || 'Vừa') + '</p></td>' +
                 '<td class="feedback-text">' + cleanText(item.message || '—') + '</td>' +
                 '<td>' + cleanText(item.email || '—') + '</td>' +
                 '<td><label class="visually-hidden" for="status-' + cleanText(item.id) +
@@ -43,7 +47,9 @@ if (feedbackModerator) {
                     '<button class="link-button" data-edit="' + cleanText(item.id) +
                     '" type="button">Sửa</button>' +
                     '<button class="link-button danger" data-delete="' + cleanText(item.id) +
-                    '" type="button">Xóa</button></div></td></tr>'
+                    '" type="button">Xóa</button>' +
+                    '<button class="link-button" data-archive="' + cleanText(item.id) +
+                    '" type="button">' + (item.archived ? 'Khôi phục' : 'Lưu trữ') + '</button></div></td></tr>'
             );
         }
 
@@ -69,7 +75,21 @@ if (feedbackModerator) {
         bindButtons();
     }
 
+    function toggleArchive(id) {
+        const feedbackItems = getUserData('feedback', []);
+        const item = findItemById(feedbackItems, id);
+        if (!item) return;
+        item.archived = !item.archived;
+        item.updatedAt = new Date().toISOString();
+        if (!saveUserData('feedback', feedbackItems)) return;
+        renderPage();
+        showToast(item.archived ? 'Đã lưu trữ phản hồi.' : 'Đã khôi phục phản hồi.');
+    }
+
     function bindButtons() {
+        document.querySelectorAll('[data-archive]').forEach(function (button) {
+            button.addEventListener('click', function () { toggleArchive(this.dataset.archive); });
+        });
         const editButtons = document.querySelectorAll('[data-edit]');
         const deleteButtons = document.querySelectorAll('[data-delete]');
         const statusInputs = document.querySelectorAll('[data-status]');
@@ -110,6 +130,10 @@ if (feedbackModerator) {
                     '<textarea id="feedbackMessage" rows="5" maxlength="1000" required></textarea></div>' +
                 '<div class="field"><label for="feedbackEmail">Email demo (không bắt buộc)</label>' +
                     '<input id="feedbackEmail" type="email" maxlength="120"></div>' +
+                '<div class="field"><label for="feedbackSeverity">Mức độ</label>' +
+                    '<select id="feedbackSeverity">' + severityOptions.map(function (level) {
+                        return '<option value="' + level + '">' + level + '</option>';
+                    }).join('') + '</select></div>' +
                 '<div class="field"><label for="feedbackStatus">Trạng thái</label>' +
                     '<select id="feedbackStatus">' + statusMarkup + '</select></div>' +
                 '<p id="feedbackFormMessage" class="form-message" aria-live="polite"></p>' +
@@ -119,6 +143,7 @@ if (feedbackModerator) {
                 '</div></form>'
         );
 
+        document.getElementById('feedbackSeverity').value = item ? (item.severity || 'Vừa') : 'Vừa';
         if (item) {
             document.getElementById('feedbackTitle').value = item.title || '';
             document.getElementById('feedbackMessage').value = item.message || '';
@@ -139,6 +164,7 @@ if (feedbackModerator) {
         const email = document.getElementById('feedbackEmail').value.trim();
         const status = document.getElementById('feedbackStatus').value;
         const formMessage = document.getElementById('feedbackFormMessage');
+        const severity = document.getElementById('feedbackSeverity').value;
 
         if (title.length < 3 || message.length < 5) {
             formMessage.textContent =
@@ -149,7 +175,7 @@ if (feedbackModerator) {
             formMessage.textContent = 'Email demo chưa đúng định dạng.';
             return;
         }
-        if (statusOptions.indexOf(status) === -1) {
+        if (statusOptions.indexOf(status) === -1 || severityOptions.indexOf(severity) === -1) {
             formMessage.textContent = 'Hãy chọn trạng thái hợp lệ.';
             return;
         }
@@ -169,9 +195,10 @@ if (feedbackModerator) {
         item.message = message;
         item.email = email;
         item.status = status;
+        item.severity = severity;
         item.updatedAt = new Date().toISOString();
 
-        saveUserData('feedback', feedbackItems);
+        if (!saveUserData('feedback', feedbackItems)) return;
         closeModal();
         showToast('Đã lưu phản hồi demo.');
         renderPage();
@@ -192,7 +219,7 @@ if (feedbackModerator) {
 
         item.status = status;
         item.updatedAt = new Date().toISOString();
-        saveUserData('feedback', feedbackItems);
+        if (!saveUserData('feedback', feedbackItems)) return;
         showToast('Đã cập nhật trạng thái.');
         renderPage();
     }
@@ -207,7 +234,7 @@ if (feedbackModerator) {
             return item.id !== id;
         });
 
-        saveUserData('feedback', remaining);
+        if (!saveUserData('feedback', remaining)) return;
         showToast('Đã xóa phản hồi.');
         renderPage();
     }
