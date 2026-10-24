@@ -37,3 +37,29 @@
     background: #39c9a1;
     transition: width 0.3s;
 }
+
+.splash-card {
+    width: min(620px, 100%);
+    padding: 24px 18px;
+}
+
+.loading-track {
+    max-width: 100%;
+}
+
+.splash-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.splash-card p {
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+.splash-links :focus-visible {
+    outline: 3px solid #168768;
+    outline-offset: 3px;
+}

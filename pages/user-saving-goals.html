@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mục tiêu tiết kiệm | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/modules/user-saving-goals.css">
+</head>
+<body>
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar">
+            <a class="brand" href="home.html">SpendWise</a>
+            <div id="roleBadge" class="role-badge"></div>
+            <nav id="sidebarNav" class="nav-list" aria-label="Điều hướng chính"></nav>
+            <div class="sidebar-bottom"><button id="logoutBtn" class="btn btn-outline" type="button">Đăng xuất</button></div>
+        </aside>
+        <div class="app-area">
+            <header class="topbar">
+                <button id="mobileMenu" class="mobile-menu" type="button" aria-label="Mở menu" aria-controls="sidebar" aria-expanded="false">☰</button>
+                <span class="muted">Không dùng dữ liệu tài chính thật • Bản Frontend demo</span>
+                <div id="userInitials" class="avatar">US</div>
+            </header>
+            <main class="content-area">
+                <header class="page-heading"><h1>Mục tiêu tiết kiệm</h1><span class="screen-code">U03 • SV1</span></header>
+                <nav class="workspace-links" aria-label="Ba trang USER mới">
+                    <a href="user-finance-dashboard.html">Tổng quan tài chính</a>
+                    <a href="user-transaction-management.html">Quản lý giao dịch</a>
+                    <a href="user-saving-goals.html" aria-current="page">Mục tiêu tiết kiệm</a>
+                </nav>
+                <p id="pageMessage" class="form-message" role="alert"></p>
+                <div class="user-workspace">
+
+                <section id="stats" class="stats-grid" aria-label="Thống kê mục tiêu"></section>
+                <section class="panel" aria-labelledby="formTitle">
+                    <h2 id="formTitle">Tạo mục tiêu</h2>
+                    <form id="goalForm" novalidate>
+                        <div class="form-grid">
+                            <div class="field"><label for="goalName">Tên mục tiêu</label><input id="goalName" maxlength="100" required></div>
+                            <div class="field"><label for="target">Số tiền mục tiêu (VND)</label><input id="target" type="number" min="1" max="1000000000000" step="1" required></div>
+                            <div class="field"><label for="saved">Đã góp ban đầu (VND)</label><input id="saved" type="number" min="0" max="1000000000000" step="1" value="0" required></div>
+                            <div class="field"><label for="deadline">Hạn hoàn thành</label><input id="deadline" type="date" max="2100-12-31" required></div>
+                        </div>
+                        <p id="formMessage" class="form-message" role="alert"></p>
+                        <div class="actions">
+                            <button class="btn btn-primary" type="submit">Lưu mục tiêu</button>
+                            <button id="cancelEdit" class="btn btn-outline hidden" type="button">Hủy sửa</button>
+                        </div>
+                    </form>
+                    <p class="note">Trạng thái được tính từ số tiền và hạn. Góp tiền là theo dõi tích lũy, không tự tạo giao dịch chi.</p>
+                </section>
+                <section class="panel" aria-labelledby="listTitle">
+                    <h2 id="listTitle">Mục tiêu của bạn</h2>
+                    <div class="toolbar">
+                        <div class="field"><label for="search">Tìm tên mục tiêu</label><input id="search" type="search"></div>
+                        <div class="field"><label for="statusFilter">Trạng thái</label><select id="statusFilter"><option value="">Tất cả</option><option>Đang thực hiện</option><option>Hoàn tất</option><option>Quá hạn</option></select></div>
+                        <button id="clearFilters" class="btn btn-outline" type="button">Xóa bộ lọc</button>
+                    </div>
+                    <p id="listMessage" role="status"></p>
+                    <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng mục tiêu, cuộn ngang trên điện thoại">
+                        <table class="data-table"><caption class="visually-hidden">Mục tiêu theo bộ lọc</caption>
+                            <thead><tr><th scope="col">Mục tiêu</th><th scope="col">Tiến độ</th><th scope="col">Hạn</th><th scope="col">Trạng thái</th><th scope="col">Thao tác</th></tr></thead>
+                            <tbody id="goalRows"></tbody>
+                        </table>
+                    </div>
+                    <p id="goalDetail" tabindex="-1" role="status">Chọn Xem để đọc chi tiết mục tiêu.</p>
+                </section>
+                <section class="panel" aria-labelledby="contributeTitle">
+                    <h2 id="contributeTitle">Góp thêm vào mục tiêu</h2>
+                    <form id="contributionForm" novalidate>
+                        <div class="form-grid">
+                            <div class="field"><label for="contributionGoal">Mục tiêu nhận khoản góp</label><select id="contributionGoal"></select></div>
+                            <div class="field"><label for="contributionAmount">Khoản góp (VND)</label><input id="contributionAmount" type="number" min="1" max="1000000000000" step="1" required></div>
+                        </div>
+                        <p id="contributionMessage" class="form-message" role="status"></p>
+                        <button class="btn btn-primary" type="submit">Lưu khoản góp</button>
+                    </form>
+                </section>
+                <section class="panel" aria-labelledby="coachTitle">
+                    <h2 id="coachTitle">AI Goal Coach</h2>
+                    <div class="form-grid">
+                        <div class="field"><label for="coachGoal">Mục tiêu cần lên kế hoạch</label><select id="coachGoal"></select></div>
+                        <div class="field"><label for="frequency">Chu kỳ góp</label><select id="frequency"><option value="weekly">Hàng tuần</option><option value="monthly">Hàng tháng</option></select></div>
+                    </div>
+                    <p class="note">Tạo lại tính lại từ số tiền và hạn hiện tại. Kết quả giống nhau nếu dữ liệu và chu kỳ không thay đổi.</p>
+
+                    <div id="aiBox" class="ai-box" aria-busy="false">
+                        <p id="aiMessage" role="status">AI mô phỏng bằng quy tắc JavaScript; chưa có kết quả.</p>
+                        <button id="aiGenerate" class="btn btn-outline" type="button">Tạo gợi ý AI mock</button>
+                        <div id="aiResult" class="hidden">
+                            <p id="aiExplanation"></p>
+                            <div class="field">
+                                <label for="aiChoice">Lựa chọn đề xuất (nhấn Sửa để điều chỉnh)</label>
+                                <input id="aiChoice" type="number" min="1" max="1000000000000" step="1" disabled>
+                            </div>
+                        </div>
+                        <div id="aiActions" class="ai-actions hidden">
+                            <button id="aiAccept" class="btn btn-outline" type="button">Chấp nhận</button>
+                            <button id="aiEdit" class="btn btn-outline" type="button">Sửa</button>
+                            <button id="aiReject" class="btn btn-outline" type="button">Từ chối</button>
+                            <button id="aiAgain" class="btn btn-outline" type="button">Tạo lại</button>
+                            <button id="aiSave" class="btn btn-primary" type="button" disabled>Lưu lựa chọn</button>
+                        </div>
+                    </div>
+                    <h3>Kế hoạch đã lưu</h3>
+                    <div id="savedPlans"></div>
+                </section>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/api.js" defer></script>
+    <script src="../js/modules/sv1-auth.js" defer></script>
+    <script src="../js/modules/user-saving-goals.js" defer></script>
+</body>
+</html>
