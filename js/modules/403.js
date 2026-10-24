@@ -1,11 +1,13 @@
 const backDashboard = document.getElementById('backDashboard');
 
-backDashboard.addEventListener('click', function () {
-    const user = getCurrentUser();
+if (backDashboard) {
+    backDashboard.addEventListener('click', function () {
+        const user = getCurrentUser();
 
-    if (user) {
-        goToDashboard(user);
-    } else {
-        window.location.href = 'login.html';
-    }
-});
+        if (user) {
+            goToDashboard(user);
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
+}

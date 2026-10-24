@@ -1,0 +1,159 @@
+/* CSS riêng của SV1, chỉ áp dụng trong trang này. */
+.user-workspace {
+    display: grid;
+    gap: 20px;
+}
+.user-workspace .panel {
+    min-height: 0;
+    border-radius: 10px;
+}
+.workspace-links,
+.user-workspace .toolbar,
+.user-workspace .ai-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+.workspace-links {
+    margin-bottom: 24px;
+}
+.workspace-links a {
+    padding: 10px 14px;
+    border: 1px solid #d7e2df;
+    border-radius: 6px;
+}
+.workspace-links a[aria-current="page"] {
+    background: #0d2b31;
+    color: white;
+}
+.user-workspace .toolbar {
+    margin-bottom: 16px;
+    align-items: end;
+}
+.user-workspace .toolbar .field {
+    flex: 1 1 160px;
+    margin-bottom: 0;
+}
+.user-workspace .ai-box {
+    padding: 18px;
+    border-left: 4px solid #39c9a1;
+    background: #f1fbf7;
+    margin: 16px 0;
+}
+.user-workspace .ai-box[aria-busy="true"] {
+    opacity: 0.7;
+}
+.user-workspace .ai-actions {
+    margin-top: 14px;
+}
+.user-workspace button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+.user-workspace .positive {
+    color: #087052;
+}
+.user-workspace .negative {
+    color: #b7444c;
+}
+.user-workspace p,
+.user-workspace td,
+.user-workspace h3 {
+    overflow-wrap: anywhere;
+}
+.user-workspace .saved-card {
+    padding: 14px 0;
+    border-bottom: 1px solid #d7e2df;
+}
+.user-workspace progress {
+    width: 100%;
+    accent-color: #15976d;
+}
+.user-workspace .data-table {
+    min-width: 660px;
+}
+.user-workspace .form-message {
+    color: #a33d46;
+}
+.user-workspace .note {
+    font-size: 14px;
+    color: #526b70;
+}
+.user-workspace input,
+.user-workspace select {
+    max-width: 100%;
+}
+:focus-visible {
+    outline: 3px solid #168768;
+    outline-offset: 3px;
+}
+.dark .user-workspace .ai-box {
+    background: #173c35;
+}
+.dark .user-workspace .note {
+    color: #bfd2d4;
+}
+.dark .workspace-links a {
+    border-color: #476065;
+}
+@media (max-width: 560px) {
+    .workspace-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .page-heading {
+        flex-wrap: wrap;
+    }
+    .user-workspace .toolbar {
+        align-items: stretch;
+    }
+    .user-workspace .toolbar .field {
+        flex-basis: 100%;
+    }
+    .user-workspace .ai-actions .btn {
+        flex: 1 1 120px;
+    }
+    .stat-card strong {
+        font-size: 17px;
+        overflow-wrap: anywhere;
+    }
+}
+
+@media (max-width: 560px) {
+    .topbar {
+        height: auto;
+        min-height: 80px;
+        gap: 10px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .topbar > .muted {
+        flex: 1;
+        min-width: 0;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .avatar,
+    .mobile-menu {
+        flex-shrink: 0;
+    }
+}
+
+/* Cho phép cột Grid co nhỏ; bảng chỉ cuộn bên trong table-wrap. */
+.user-workspace,
+.user-workspace > * {
+    min-width: 0;
+}
+
+.user-workspace .stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+    .user-workspace .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

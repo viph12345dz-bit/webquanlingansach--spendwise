@@ -1,0 +1,15 @@
+.page-note {
+    max-width: 820px;
+    margin: -14px 0 24px;
+    line-height: 1.6;
+}
+
+.category-keywords {
+    max-width: 300px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.category-name {
+    font-weight: bold;
+}

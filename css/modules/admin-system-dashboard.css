@@ -1,0 +1,22 @@
+.page-note {
+    max-width: 820px;
+    margin: -14px 0 24px;
+    line-height: 1.6;
+}
+
+.system-name {
+    font-weight: bold;
+}
+
+.system-description {
+    display: block;
+    max-width: 360px;
+    margin-top: 4px;
+    color: #738589;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.system-load {
+    white-space: nowrap;
+}

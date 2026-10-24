@@ -1,0 +1,16 @@
+.page-note {
+    max-width: 760px;
+    margin: -14px 0 24px;
+    line-height: 1.6;
+}
+
+.feedback-text {
+    max-width: 420px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+#tableContent select {
+    min-width: 135px;
+}

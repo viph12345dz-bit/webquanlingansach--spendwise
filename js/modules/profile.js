@@ -16,7 +16,7 @@ if (user) {
             [cleanText(user.name), 'Tên hiển thị'],
             [ROLE_NAMES[user.role] || user.role, 'Vai trò'],
             [new Date(user.createdAt).toLocaleDateString('vi-VN'), 'Thành viên từ'],
-            ['Đã xác minh', 'Trạng thái']
+            ['Tài khoản demo', 'Trạng thái']
         ]);
 
         displayName.value = user.name;
@@ -35,12 +35,18 @@ if (user) {
             return;
         }
 
-        current.name = displayName.value.trim();
+        const name = displayName.value.trim();
+        if (!canWriteAppData()) return;
+        if (name.length < 2 || name.length > 80) {
+            showToast('Tên hiển thị cần từ 2 đến 80 ký tự, không chỉ khoảng trắng.', 'error');
+            return;
+        }
+        current.name = name;
         profile.phone = phone.value.trim();
         profile.timezone = profileTimezone.value;
 
-        saveUsers(users);
-        saveUserData('profile', profile);
+        if (!saveUsers(users)) return;
+        if (!saveUserData('profile', profile)) return;
         user.name = current.name;
 
         showToast('Đã lưu hồ sơ.');

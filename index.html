@@ -16,15 +16,22 @@
             <h1>SpendWise</h1>
             <p>Quản lý thông minh • Chi tiêu có chủ đích</p>
 
-            <div class="loading-track">
+            <div id="loadingProgress" class="loading-track" role="progressbar" aria-label="Tiến độ mở SpendWise" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                 <div id="loadingBar" class="loading-bar"></div>
             </div>
 
-            <small>Đang chuẩn bị không gian tài chính của bạn…</small>
+            <p id="indexMessage" role="status">Đang chuẩn bị không gian tài chính DEMO của bạn…</p>
+            <nav class="splash-links" aria-label="Bắt đầu với SpendWise">
+                <a class="btn btn-primary" href="pages/login.html">Đăng nhập demo</a>
+                <a class="btn btn-outline" href="pages/register.html">Đăng ký demo</a>
+                <a class="btn btn-outline" href="pages/home.html">Giới thiệu</a>
+            </nav>
+            <noscript>Bật JavaScript để sử dụng các chức năng demo.</noscript>
         </section>
     </main>
 
     <script src="js/main.js" defer></script>
+    <script src="js/modules/sv1-auth.js" defer></script>
     <script src="js/modules/index.js" defer></script>
 </body>
 </html>

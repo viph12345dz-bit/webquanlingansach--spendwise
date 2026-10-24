@@ -133,7 +133,7 @@ if (user) {
             <form id="notificationForm">
                 <div class="field">
                     <label for="text">Nội dung</label>
-                    <input id="text" type="text" required>
+                    <input id="text" type="text" maxlength="500" required>
                 </div>
 
                 <div class="field">
@@ -166,6 +166,17 @@ if (user) {
     function saveNotification(id) {
         const items = getUserData('notifications', []);
         let item = id ? findItemById(items, id) : null;
+        const text = document.getElementById('text').value.trim();
+        const type = document.getElementById('type').value;
+        if (!canWriteAppData()) return;
+        if (id && !item) {
+            showToast('Thông báo đã bị xóa. Hãy tải lại danh sách.', 'error');
+            return;
+        }
+        if (!text || text.length > 500 || ['Hệ thống', 'Ngân sách', 'Mục tiêu', 'Cập nhật'].indexOf(type) === -1) {
+            showToast('Nhập nội dung thông báo và loại hợp lệ.', 'error');
+            return;
+        }
 
         if (!item) {
             item = {
@@ -180,7 +191,7 @@ if (user) {
         item.text = document.getElementById('text').value.trim();
         item.type = document.getElementById('type').value;
 
-        saveUserData('notifications', items);
+        if (!saveUserData('notifications', items)) return;
         closeModal();
         renderPage();
     }
@@ -191,7 +202,7 @@ if (user) {
 
         if (item) {
             item.read = !item.read;
-            saveUserData('notifications', items);
+            if (!saveUserData('notifications', items)) return;
             renderPage();
         }
     }
@@ -210,7 +221,7 @@ if (user) {
             }
         }
 
-        saveUserData('notifications', newList);
+        if (!saveUserData('notifications', newList)) return;
         renderPage();
     }
 
