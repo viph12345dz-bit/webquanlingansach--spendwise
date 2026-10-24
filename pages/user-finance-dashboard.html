@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng quan tài chính | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/modules/user-finance-dashboard.css">
+</head>
+<body>
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar">
+            <a class="brand" href="home.html">SpendWise</a>
+            <div id="roleBadge" class="role-badge"></div>
+            <nav id="sidebarNav" class="nav-list" aria-label="Điều hướng chính"></nav>
+            <div class="sidebar-bottom"><button id="logoutBtn" class="btn btn-outline" type="button">Đăng xuất</button></div>
+        </aside>
+        <div class="app-area">
+            <header class="topbar">
+                <button id="mobileMenu" class="mobile-menu" type="button" aria-label="Mở menu" aria-controls="sidebar" aria-expanded="false">☰</button>
+                <span class="muted">Không dùng dữ liệu tài chính thật • Bản Frontend demo</span>
+                <div id="userInitials" class="avatar">US</div>
+            </header>
+            <main class="content-area">
+                <header class="page-heading"><h1>Tổng quan tài chính</h1><span class="screen-code">U01 • SV1</span></header>
+                <nav class="workspace-links" aria-label="Ba trang USER mới">
+                    <a href="user-finance-dashboard.html" aria-current="page">Tổng quan tài chính</a>
+                    <a href="user-transaction-management.html">Quản lý giao dịch</a>
+                    <a href="user-saving-goals.html">Mục tiêu tiết kiệm</a>
+                </nav>
+                <p id="pageMessage" class="form-message" role="alert"></p>
+                <div class="user-workspace">
+
+                <section class="panel" aria-labelledby="rangeTitle">
+                    <h2 id="rangeTitle">Kỳ thống kê</h2>
+                    <div class="toolbar">
+                        <div class="field"><label for="fromDate">Từ ngày (bỏ trống: từ đầu)</label><input id="fromDate" type="date"></div>
+                        <div class="field"><label for="toDate">Đến ngày (bỏ trống: tất cả)</label><input id="toDate" type="date"></div>
+                        <button id="clearFilters" class="btn btn-outline" type="button">Xóa bộ lọc</button>
+                    </div>
+                    <p id="filterMessage" class="form-message" role="alert"></p>
+                    <p class="note">Thẻ tổng và thống kê danh mục tính theo kỳ. Tìm kiếm và loại giao dịch chỉ lọc bảng bên dưới.</p>
+                </section>
+                <section id="stats" class="stats-grid" aria-label="Tổng thu chi và mục tiêu"></section>
+                <p id="savingRate" role="status"></p>
+                <section class="panel" aria-labelledby="categoryTitle">
+                    <h2 id="categoryTitle">Cơ cấu chi tiêu theo danh mục</h2>
+                    <div id="categorySummary"></div>
+                </section>
+                <section class="panel" aria-labelledby="transactionsTitle">
+                    <h2 id="transactionsTitle">Giao dịch trong kỳ</h2>
+                    <div class="toolbar">
+                        <div class="field"><label for="search">Tìm mô tả / danh mục</label><input id="search" type="search"></div>
+                        <div class="field"><label for="typeFilter">Loại giao dịch trong bảng</label><select id="typeFilter"><option value="">Tất cả</option><option value="income">Thu nhập</option><option value="expense">Chi tiêu</option></select></div>
+                        <a class="btn btn-primary" href="user-transaction-management.html">Quản lý giao dịch</a>
+                    </div>
+                    <p id="listMessage" role="status"></p>
+                    <div class="table-wrap" tabindex="0" role="region" aria-label="Bảng giao dịch, cuộn ngang trên điện thoại">
+                        <table class="data-table"><caption class="visually-hidden">Giao dịch trong kỳ</caption>
+                            <thead><tr><th scope="col">Ngày</th><th scope="col">Mô tả</th><th scope="col">Danh mục</th><th scope="col">Loại</th><th scope="col">Số tiền</th></tr></thead>
+                            <tbody id="transactionRows"></tbody>
+                        </table>
+                    </div>
+                </section>
+                <section class="panel" aria-labelledby="goalsTitle">
+                    <h2 id="goalsTitle">Tiến độ mục tiêu • mọi kỳ</h2>
+                    <div id="goalSummary"></div>
+                    <a class="btn btn-outline" href="user-saving-goals.html">Quản lý mục tiêu</a>
+                </section>
+                <section class="panel" aria-labelledby="insightTitle">
+                    <h2 id="insightTitle">AI Spending Pattern Insight</h2>
+                    <div class="field">
+                        <label for="cutPercent">Mức giảm tham khảo cho danh mục chi nhiều nhất (%)</label>
+                        <input id="cutPercent" type="number" min="1" max="80" step="1" value="10">
+                    </div>
+                    <p class="note">Dùng các khoản chi trong kỳ thống kê ở đầu trang. Cần ít nhất 3 khoản chi. Tạo lại giữ kết quả khi dữ liệu và mức giảm không đổi.</p>
+
+                    <div id="aiBox" class="ai-box" aria-busy="false">
+                        <p id="aiMessage" role="status">AI mô phỏng bằng quy tắc JavaScript; chưa có kết quả.</p>
+                        <button id="aiGenerate" class="btn btn-outline" type="button">Tạo gợi ý AI mock</button>
+                        <div id="aiResult" class="hidden">
+                            <p id="aiExplanation"></p>
+                            <div class="field">
+                                <label for="aiChoice">Lựa chọn đề xuất (nhấn Sửa để điều chỉnh)</label>
+                                <input id="aiChoice" type="number" min="1" max="9007199254740991" step="1" disabled>
+                            </div>
+                        </div>
+                        <div id="aiActions" class="ai-actions hidden">
+                            <button id="aiAccept" class="btn btn-outline" type="button">Chấp nhận</button>
+                            <button id="aiEdit" class="btn btn-outline" type="button">Sửa</button>
+                            <button id="aiReject" class="btn btn-outline" type="button">Từ chối</button>
+                            <button id="aiAgain" class="btn btn-outline" type="button">Tạo lại</button>
+                            <button id="aiSave" class="btn btn-primary" type="button" disabled>Lưu lựa chọn</button>
+                        </div>
+                    </div>
+                    <h3>Ngưỡng theo dõi đã lưu</h3>
+                    <div id="savedInsights"></div>
+                </section>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/api.js" defer></script>
+    <script src="../js/modules/sv1-auth.js" defer></script>
+    <script src="../js/modules/user-finance-dashboard.js" defer></script>
+</body>
+</html>

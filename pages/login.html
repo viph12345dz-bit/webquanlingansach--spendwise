@@ -18,21 +18,21 @@
         </section>
 
         <section class="auth-main">
-            <form id="loginForm" class="auth-card">
+            <form id="loginForm" class="auth-card" novalidate>
                 <h2>Chào mừng trở lại</h2>
-                <p class="muted">Đăng nhập để tiếp tục quản lý ngân sách.</p>
+                <p class="muted">Bản DEMO Frontend: tài khoản chỉ lưu trong trình duyệt này. Không dùng email hoặc mật khẩu thật.</p>
 
                 <div class="field">
                     <label for="email">Email</label>
-                    <input id="email" type="email" required placeholder="Email">
+                    <input id="email" type="email" autocomplete="email" maxlength="254" required placeholder="Email">
                 </div>
 
                 <div class="field">
                     <label for="password">Mật khẩu</label>
-                    <input id="password" type="password" required placeholder="Mật khẩu">
+                    <input id="password" type="password" autocomplete="current-password" required placeholder="Mật khẩu">
                 </div>
 
-                <p id="message" class="form-message"></p>
+                <p id="message" class="form-message" role="status" aria-live="polite"></p>
 
                 <button class="btn btn-primary btn-block" type="submit">Đăng nhập</button>
 
@@ -46,6 +46,7 @@
     </main>
 
     <script src="../js/main.js" defer></script>
+    <script src="../js/modules/sv1-auth.js" defer></script>
     <script src="../js/modules/login.js" defer></script>
 </body>
 </html>

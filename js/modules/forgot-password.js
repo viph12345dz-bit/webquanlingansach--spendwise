@@ -1,40 +1,42 @@
-const resetForm = document.getElementById('resetForm');
-const message = document.getElementById('message');
+(function () {
+    'use strict';
 
-resetForm.addEventListener('submit', function (event) {
-    event.preventDefault();
+    const form = document.getElementById('resetForm');
+    const message = document.getElementById('message');
 
-    const email = document.getElementById('email').value.trim().toLowerCase();
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const users = getUsers();
-    let user = null;
-
-    if (newPassword.length < 6) {
-        message.textContent = 'Mật khẩu mới phải có ít nhất 6 ký tự.';
-        return;
+    function showMessage(text, success) {
+        message.textContent = text;
+        message.classList.toggle('success', Boolean(success));
     }
 
-    if (newPassword !== confirmPassword) {
-        message.textContent = 'Hai mật khẩu không giống nhau.';
-        return;
-    }
+    function resetPassword(event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const password = document.getElementById('newPassword').value;
+        const confirmation = document.getElementById('confirmPassword').value;
+        let error = SV1Auth.emailError(email) || SV1Auth.passwordError(password);
+        if (!error && password !== confirmation) {
+            error = 'Hai mật khẩu không giống nhau.';
+        }
+        showMessage(error, false);
+        if (error) {
+            return;
+        }
 
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].email === email) {
-            user = users[i];
-            break;
+        try {
+            const user = SV1Auth.findByEmail(email);
+            if (!user) {
+                showMessage('Email này chưa có tài khoản demo trong trình duyệt.', false);
+                return;
+            }
+            SV1Auth.resetPassword(user, password);
+            form.reset();
+            showMessage('Đã đổi mật khẩu DEMO trên trình duyệt này. Không gửi email. Bạn có thể quay lại đăng nhập.', true);
+        } catch (error) {
+            showMessage(error.message, false);
         }
     }
 
-    if (!user) {
-        message.textContent = 'Email này chưa có tài khoản.';
-        return;
-    }
-
-    user.password = newPassword;
-    saveUsers(users);
-
-    message.textContent = 'Đã đổi mật khẩu. Bạn có thể đăng nhập lại.';
-    message.classList.add('success');
-});
+    form.addEventListener('submit', resetPassword);
+    form.addEventListener('input', function () { showMessage('', false); });
+})();
