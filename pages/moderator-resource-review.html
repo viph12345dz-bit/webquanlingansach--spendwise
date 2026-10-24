@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kiểm duyệt tài nguyên do Coach gửi trong SpendWise demo">
+    <title>Kiểm duyệt tài nguyên | SpendWise</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/modules/moderator-resource-review.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+    <div id="toast" class="toast" aria-live="polite"></div>
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar">
+            <a class="brand" href="home.html">SpendWise</a>
+            <div id="roleBadge" class="role-badge"></div>
+            <nav id="sidebarNav" class="nav-list" aria-label="Điều hướng chính"></nav>
+            <div class="sidebar-bottom">
+                <button id="logoutBtn" class="btn btn-outline" type="button">Đăng xuất</button>
+            </div>
+        </aside>
+        <div class="app-area">
+            <header class="topbar">
+                <button id="mobileMenu" class="mobile-menu" type="button"
+                    aria-label="Mở menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+                <div class="search-wrap">
+                    <label class="visually-hidden" for="globalSearch">Tìm tài nguyên</label>
+                    <input id="globalSearch" class="search-input" type="search"
+                        placeholder="Tìm tài nguyên...">
+                </div>
+                <div id="userInitials" class="avatar" aria-label="Người dùng hiện tại">US</div>
+            </header>
+            <main class="content-area">
+                <header class="page-heading">
+                    <h1>Kiểm duyệt tài nguyên</h1>
+                    <span class="screen-code">MODERATOR • DEMO</span>
+                </header>
+                <p class="muted page-note">
+                    Danh sách đọc từ cùng khóa tài nguyên mà Coach sử dụng.
+                    Trạng thái và ghi chú kiểm duyệt được lưu trong trình duyệt này.
+                </p>
+                <section id="stats" class="stats-grid" aria-label="Thống kê kiểm duyệt"></section>
+                <section class="panel">
+                    <header class="panel-header">
+                        <h2>Tài nguyên từ Coach</h2>
+                        <div class="panel-tools">
+                            <label class="visually-hidden" for="statusFilter">Lọc trạng thái</label>
+                            <select id="statusFilter" class="filter-select">
+                                <option value="all">Tất cả trạng thái</option>
+                                <option value="pending">Chờ duyệt</option>
+                                <option value="approved">Đã duyệt</option>
+                                <option value="rejected">Từ chối</option>
+                                <option value="needs-revision">Yêu cầu sửa</option>
+                                <option value="draft">Bản nháp Coach</option>
+                            </select>
+                        </div>
+                    </header>
+                    <div id="tableContent" aria-live="polite"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <div id="modalOverlay" class="modal-overlay hidden"></div>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/api.js" defer></script>
+    <script src="../js/modules/moderator-resource-review.js" defer></script>
+</body>
+</html>
